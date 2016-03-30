@@ -1,11 +1,13 @@
 '''
-Module Name:    sigcheckWrapper
-Author:         Kyle Parrish (kfparri@gmail.com)
+Module Name:        sigcheckWrapper
+Author:             Kyle Parrish (kfparri@gmail.com)
 Module Description: This module acts as a wrapper for sigcheck.  This wrapper will run sigcheck and compare it against
                         a known good list of certificates on the local machine.  If there are not changes, this module
                         does nothing.  If a change is detected, a notifcation will appear in the Windows taskbar.
 Version:            0.1
-Requirements:   wxPython
+Requirements:       The following will need to be installed on the machine running this script:
+                        Python
+                        wxPython
 
 Changelog
     Date            Author              Description
@@ -34,8 +36,8 @@ if os.path.isfile(LOG_FILE):
         os.remove(LOG_FILE + ".bak")
 
     if os.path.isfile(LOG_FILE):
-        os.remove(LOG_FILE)
         os.rename(LOG_FILE, LOG_FILE + ".bak")
+        #os.remove(LOG_FILE)
 
     logger = open(LOG_FILE, 'w')
     writeLog("Initialized the log file")
@@ -84,11 +86,12 @@ for line in output:
 # if there are issues, create a notification alert!
 
 # I'm going to simply compare the two files, I have not had the certificates appear in a different order yet.
-if not filecmp.cmp('file.csv', 'file2.csv'):
-    writeLog("The files don't match!  Displaying an error message!")
-    #TODO: More to come here
-else:
+#THIS DOESN'T WORK, I NEED TO DO SOMETHING ELSE HERE:
+if filecmp.cmp(REF_FILE, RESULTS_FILE):
     writeLog("The certificate files are the same!  No changes in certificates from the reference file!")
+else:
+    writeLog("The files don't match!  Displaying an error message!")
+    # TODO: More to come here
 
 writeLog("Job completed, closing files...")
 # always remember to close the file!
